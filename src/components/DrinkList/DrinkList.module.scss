@@ -1,0 +1,48 @@
+.drinkList {
+    .heading {
+        text-align: left;
+        margin-left: 10px;
+    }
+    .drinks {
+        ul {
+            list-style: none;
+            text-align: left;
+            width: 100%;
+            padding-left: 0;
+            li {
+                border-top: 2px solid #ccc;
+                border-bottom: 2px solid #ccc;
+                padding: 10px 1px 10px 15px;
+            }
+            li:hover{
+                background-color: black;
+                color: white;
+                cursor: pointer;
+            }
+        }
+        .newDrink:hover{
+            cursor: pointer;
+        }
+    }
+    .drink {
+        .drinkForm{
+            input,select {
+                padding: 10px 1px;
+                width: 99%;
+            }
+        }
+    }
+    .newDrink,.addDrink {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 50%;
+        margin: auto;
+        padding: 10px 1px;
+    }
+    .addDrink{
+        margin-top: 20px;
+    }
+    .addDrink:hover{
+        cursor: pointer;
+    }
+}

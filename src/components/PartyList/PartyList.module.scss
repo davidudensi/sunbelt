@@ -1,0 +1,48 @@
+.partyList {
+    .heading {
+        text-align: left;
+        margin-left: 10px;
+    }
+    .parties {
+        ul {
+            list-style: none;
+            text-align: left;
+            width: 100%;
+            padding-left: 0;
+            li {
+                border-top: 2px solid #ccc;
+                border-bottom: 2px solid #ccc;
+                padding: 10px 1px 10px 15px;
+            }
+            li:hover{
+                background-color: black;
+                color: white;
+                cursor: pointer;
+            }
+        }
+        .newParty:hover{
+            cursor: pointer;
+        }
+    }
+    .party {
+        .partyForm{
+            input {
+                padding: 10px 1px;
+                width: 99%;
+            }
+        }
+    }
+    .newParty,.addParty {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 50%;
+        margin: auto;
+        padding: 10px 1px;
+    }
+    .addParty{
+        margin-top: 20px;
+    }
+    .addParty:hover{
+        cursor: pointer;
+    }
+}

@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import PartyList from "../../components/PartyList/PartyList";
 import AttendeeList from "../../components/AttendeeList/AttendeeList";
 import DrinkList from "../../components/DrinkList/DrinkList";
+import { URL } from "../../constants/constants";
 
 const Manage = () => {
     const[parties, setParties] = useState([]);
@@ -17,6 +18,7 @@ const Manage = () => {
     const[allDrinks, setAllDrinks] = useState([]);
     const[attendees, setAttendees] = useState([]);
     const[drinks, setDrinks] = useState([]);
+    const[selectedParty, setSelectedParty] = useState(null);
 
     useEffect(() => {
         let mounted = true;
@@ -37,12 +39,14 @@ const Manage = () => {
         };
     }, [partyId]);
 
-    const handleFetchAttendees = async (Id) => {
+    const handleFetchAttendees = async (Id, party) => {
         setPartyId(Id);
-        const url = "http://localhost:5000/api/attendee/party/" + Id;
+        setSelectedParty(party);
+        const url = `${URL}/attendee/party/${Id}`;
         const data = await makeCall(url);
         const attendees = [];
         const people = [];
+
         data.map(obj => {
             const party = new IParty(obj.party.id, obj.party.partyDate, obj.party.location);
             const person = new IPerson(obj.person.id, obj.person.firstName, obj.person.lastName);
@@ -63,7 +67,7 @@ const Manage = () => {
     }
 
     const fetchParties = async () =>{
-        const url = "http://localhost:5000/api/party";
+        const url = `${URL}/party`;
         const data = await makeCall(url);
         const parties = [];
         data.map(obj => {
@@ -74,7 +78,7 @@ const Manage = () => {
     }
 
     const fetchDrinks = async () =>{
-        const url = "http://localhost:5000/api/drink";
+        const url = `${URL}/drink`;
         const data = await makeCall(url);
         const drinks = [];
         data.map(obj => {
@@ -102,6 +106,7 @@ const Manage = () => {
                         <PartyList 
                             parties={parties} 
                             onFetchAttendees={handleFetchAttendees} 
+                            onFetchParties={fetchParties}
                         />
                     </div>
                     <div className={styles.attendeeList}>
@@ -110,11 +115,16 @@ const Manage = () => {
                             drinkId={drinkId} 
                             people={people} 
                             allDrinks={allDrinks} 
+                            selectedParty={selectedParty}
                             onFetchDrinks={handleFetchFavoriteDrink}
+                            onFetchAttendees={handleFetchAttendees}
                         />
                     </div>
                     <div className={styles.drinkList}>
-                        <DrinkList drinks={drinks} />
+                        <DrinkList 
+                            drinks={drinks}
+                            onFetchDrinks={fetchDrinks}
+                        />
                     </div>
                 </div>
             </div>

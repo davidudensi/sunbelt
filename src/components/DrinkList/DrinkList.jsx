@@ -1,21 +1,26 @@
 import { Fragment, useState } from "react";
 import IDrink from "../../dto/IDrink";
 import styles from "./DrinkList.module.scss";
+import { URL, TempId } from "../../constants/constants";
 
-const DrinkList = ({drinks}) => {
+const DrinkList = ({drinks, onFetchDrinks}) => {
     const[newDrink, setNewDrink] = useState([]);
     const[isNewDrink, setIsNewDrink] = useState(false);
 
     const handleNewDrinkSubmit = async (event) => {
         event.preventDefault();
-        const drink = new IDrink('98032584-417a-428d-99f5-cf9400a19c51', newDrink);
-        await fetch("http://localhost:5000/api/drink", {
+        const drink = new IDrink(TempId, newDrink);
+        await fetch(`${URL}/drink`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(drink)
         })
         .then((res) => res.json())
         .then(resData => console.log(resData))
+        .then(() => {
+            setIsNewDrink(false);
+            onFetchDrinks();
+        })
         .catch((err) => {
             console.log(err);
         });

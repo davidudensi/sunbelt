@@ -2,19 +2,23 @@ import { Fragment, useState } from "react";
 import IPerson from "../../dto/IPerson";
 import IAttendee from "../../dto/IAttendee";
 import styles from "./AttendeeList.module.scss";
+import { URL, TempId } from "../../constants/constants";
 
-const AttendeeList = ({partyId, drinkId, people, allDrinks, onFetchDrinks}) => {
+const AttendeeList = ({
+    partyId, drinkId, people, allDrinks, onFetchDrinks, selectedParty, onFetchAttendees
+}) => {
     const[firstName, setFirstName] = useState([]);
     const[lastName, setLastName] = useState([]);
     const[favoriteDrink, setFavoriteDrink] = useState(null);
     const[newPerson, setNewPerson] = useState(false);
+    const[holderText, setHolderText] = useState("Select party to view attendees")
 
     const handleNewPersonSubmit = async (event) => {
         event.preventDefault();
-        const person = new IPerson('98032584-417a-428d-99f5-cf9400a19c51', firstName, lastName);
-        const attendee = new IAttendee('98032584-417a-428d-99f5-cf9400a19c51', partyId, '', drinkId);
+        const person = new IPerson(TempId, firstName, lastName);
+        const attendee = new IAttendee(TempId, partyId, '', drinkId);
 
-        await fetch("http://localhost:5000/api/person", {
+        await fetch(`${URL}/person`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(person)
@@ -22,14 +26,17 @@ const AttendeeList = ({partyId, drinkId, people, allDrinks, onFetchDrinks}) => {
             response.json()
         ).then((data) => {
             attendee.PersonId = data.id;
-            console.log(attendee);
-            fetch("http://localhost:5000/api/attendee", {
+            fetch( `${URL}/attendee`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(attendee)
             })
             .then(res => res.json())
             .then(data => console.log(data))
+            .then(() => {
+                setNewPerson(false);
+                onFetchAttendees(partyId, selectedParty);
+            });
         }).catch((err) => {
             console.log(err);
         });
@@ -71,10 +78,13 @@ const AttendeeList = ({partyId, drinkId, people, allDrinks, onFetchDrinks}) => {
                                 ))}
                             </ul> 
                             : 
-                            <p>Attendee list is empty</p>
+                            <p>{holderText}</p>
                         }
                         <div className={styles.newPerson}>
                             <span onClick={() => setNewPerson(true)}>New Attendee</span>
+                        </div>
+                        <div className={styles.selectedParty}>
+                            <span>{selectedParty && <span>{selectedParty}</span>}</span>
                         </div>
                     </div>
                 }
